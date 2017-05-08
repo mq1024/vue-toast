@@ -1,5 +1,5 @@
 {
-  "name": "vue-toast",
+  "name": "mz-vue-toast",
   "version": "1.0.0",
   "scripts": {
     "lint": "eslint src demo",
@@ -7,7 +7,7 @@
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "description": "A toast plugin for vue/vue2",
-  "main": "dist/build.js",
+  "main": "dist/mz-vue-toast.js",
   "directories": {
     "example": "example"
   },

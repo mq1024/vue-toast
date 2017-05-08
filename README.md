@@ -2,15 +2,15 @@
 vue-toast is a mobile toast plugin for vue.js.
 
 # Installation
-First, install `vue-toast` from npm:
+First, install `mz-vue-toast` from npm:
 ```bash
-$ npm install vue-toast
+$ npm install mz-vue-toast
 ```
 
 # Usage
 ```Javascript
 // before start
-import Toast from 'vue-toast';
+import Toast from 'mz-vue-toast';
 Vue.use(Toast);
 
 ```

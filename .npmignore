@@ -1,8 +1,7 @@
 DS_Store
 node_modules/
-dist
 .idea
 .jshintrc
 npm-debug.log
-src/
-example/
+
+
