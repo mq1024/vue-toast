@@ -64,4 +64,9 @@ const plugin = {
     vue.toast = vue.prototype.$toast = toast;
   }
 };
+
+// register plugin if it is used via cdn or directly as a script tag
+if (typeof window !== 'undefined' && window.Vue) {
+    window.mzToast = plugin;
+}
 export default plugin;
