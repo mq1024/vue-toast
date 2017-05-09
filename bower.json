@@ -1,0 +1,22 @@
+{
+  "name": "mz-vue-toast",
+  "description": "A toast plugin for vue/vue2",
+  "main": "dist/mz-vue-toast.js",
+  "authors": [
+    "maqian"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "vue",
+    "toast",
+    "plugin"
+  ],
+  "homepage": "https://github.com/mq1024/vue-toast",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
