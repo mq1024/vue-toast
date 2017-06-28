@@ -44,7 +44,7 @@ const plugin = {
 
       clearTimeout(instance.timer);
       instance.message = options.message || '';
-      instance.duration = (typeof options.duration === 'number' && options.duration > 0) ? options.duration : 1500;
+      instance.duration = (typeof options.duration === 'number' && options.duration > 0) ? options.duration : 3000;
       instance.type = options.type || 'info';
 
       document.body.appendChild(instance.$el);
@@ -52,8 +52,10 @@ const plugin = {
       Vue.nextTick(function() {
         instance.shown = true;
         instance.timer = setTimeout(function() {
-          instance.remove();
-          options.callback && options.callback();
+          if(instance) {
+            instance.remove();
+            options.callback && options.callback();
+          }
         }, instance.duration);
       });
 
