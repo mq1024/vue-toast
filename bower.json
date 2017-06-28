@@ -8,8 +8,7 @@
   "license": "MIT",
   "keywords": [
     "vue",
-    "toast",
-    "plugin"
+    "toast"
   ],
   "homepage": "https://github.com/mq1024/vue-toast",
   "ignore": [

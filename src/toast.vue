@@ -1,107 +1,105 @@
 <template>
-  <div>
-    <transition name="fade">
-      <div v-show="showing" class="nono-toast" :class="toastClass" >
-        <span class="nono-toast-text" v-html="mergedOption.message || options.message"></span>
+  <div v-show="shown" class="toast-mask">
+    <transition name="toast">
+      <div v-show="shown" class="toast" :class="toastClass">
+        <i :class="['toast-icon',type+'-icon']"></i>
+        <span class="toast-message" v-text="message"></span>
       </div>
     </transition>
   </div>
 </template>
-<style>
-.nono-toast {
+<style scoped lang="scss">
+.toast-mask {
   position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: transparent;
+  z-index: 1000;
+}
+
+.toast {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 0);
   max-width: 80%;
-  border-radius: 5px;
+  padding: 8px 16px;
+  border-radius: 4px;
   background: rgba(0, 0, 0, 0.7);
   color: #fff;
   box-sizing: border-box;
   text-align: center;
-  z-index: 1000;
-  transition: opacity .3s linear;
+  transition: opacity .3s;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
-.nono-toast.middle {
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+.toast-enter {
+  opacity: 0;
+  transform: translate3d(-50%, 20px, 0);
+  transform-origin: -50% -50% 0;
 }
 
-.nono-toast.top {
-  top: 50px;
-  left: 50%;
-  transform: translate(-50%, 0);
+.toast-enter-active {
+  transition: all .5s cubic-bezier(0.25, 0.1, 0.25, 1.0);
 }
 
-.nono-toast.bottom {
-  bottom: 50px;
-  left: 50%;
-  transform: translate(-50%, 0);
+.toast-leave {
+  opacity: 1;
 }
 
-.nono-toast-text {
+.toast-leave-active {
+  transition: all .5s cubic-bezier(0.25, 0.1, 0.25, 1.0);
+  opacity: 0;
+}
+
+.toast-message {
   display: block;
   font-size: 14px;
   text-align: middle;
   padding: 10px 20px;
 }
-
-.fade-enter,
-.fade-leave,
-.fade-leave-active {
-  opacity: 0;
-}
 </style>
 <script>
-const DEFAULT_OPT = {
-  message: '',
-  className: '',
-  position: 'middle',
-  duration: 3000
-};
-
 export default {
-  DEFAULT_OPT: DEFAULT_OPT,
 
   data() {
-    return {
-      options: {},
-      showing: false
-    };
-  },
-
-  computed: {
-    mergedOption() {
-      return Object.assign({}, DEFAULT_OPT, this.options);
+      return {
+        shown: false
+      }
+    },
+    props: {
+      message: String,
+      type: {
+        type: String,
+        default: 'info' //info/success/error
+      },
+      duration: {
+        type: Number,
+        default: 3000
+      },
+      className: [String, Array],
     },
 
-    toastClass() {
-      var classes = [];
-      let className = this.options.className;
-      let position = this.mergedOption.position;
+    computed: {
+      toastClass() {
+        var classes = [];
+        let className = this.className;
 
-      if (className) {
-        if (typeof className === 'string') {
-          classes.push(className);
+        if (className) {
+          if (typeof className === 'string') {
+            classes.push(className);
+          }
+          if (Array.isArray(className)) {
+            classes = classes.concat(className);
+          }
         }
-        if (Array.isArray(className)) {
-          classes = classes.concat(className);
-        }
+        return classes.join(' ');
       }
-
-      switch (position) {
-        case 'top':
-          classes.push('top');
-          break;
-        case 'bottom':
-          classes.push('bottom');
-          break;
-        default:
-          classes.push('middle');
-      }
-      classes.push(this.className);
-      return classes.join(' ');
     }
-  }
 
 };
 </script>

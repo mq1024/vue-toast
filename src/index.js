@@ -1,15 +1,15 @@
+'use strict';
+
 import ToastComponent from './toast.vue';
 
 const plugin = {
-  install(vue, defaultOptions = {}) {
-    Object.assign(ToastComponent.DEFAULT_OPT, defaultOptions); // 全局默认属性
-    const ToastConstructor = vue.extend(ToastComponent);
+  install(Vue) {
+    const ToastConstructor = Vue.extend(ToastComponent);
 
-    let toastPool = [];
+    let instance = null;
+
     let getInstance = () => {
-      if (toastPool.length > 0) {
-        let instance = toastPool[0];
-        toastPool.splice(0, 1);
+      if (instance) {
         return instance;
       }
       return new ToastConstructor({
@@ -17,51 +17,76 @@ const plugin = {
       });
     };
 
-    let addInstance = instance => {
-      if (instance) {
-        toastPool.push(instance);
+    let removeDom = el => {
+      if (el.parentNode) {
+        el.parentNode.removeChild(el);
       }
-    };
+    }
 
-    let removeDom = event => {
-      if (event.target.parentNode) {
-        event.target.parentNode.removeChild(event.target);
-      }
-    };
+    ToastConstructor.prototype.remove = function() {
+      this.shown = false;
+      instance = null;
+      removeDom(this.$el);
+    }
 
-    ToastConstructor.prototype.close = function() {
-      this.showing = false;
-      this.$el.addEventListener('transitionend', removeDom);
-      this.closed = true;
-      addInstance(this);
-    };
-
-    function toast(options = {}) {
-      let instance = getInstance();
+    let setOptions = (options) => {
       if (typeof options === 'string') {
-        instance.options.message = options;
-      } else {
-        instance.options = options;
+        options = {
+          message: options
+        }
       }
-      let duration = options.duration || ToastComponent.DEFAULT_OPT.duration;
-    
-      instance.closed = false;
+      return options || {};
+    }
+
+    const show = (options) => {
+      instance = getInstance();
+
+
       clearTimeout(instance.timer);
-     
+      instance.message = options.message || '';
+      instance.duration = (typeof options.duration === 'number' && options.duration > 0) ? options.duration : 1500;
+      instance.type = options.type || 'info';
+
       document.body.appendChild(instance.$el);
 
-      vue.nextTick(function() {
-        instance.showing = true;
-        instance.$el.removeEventListener('transitioned', removeDom);
+      Vue.nextTick(function() {
+        instance.shown = true;
         instance.timer = setTimeout(function() {
-          if (instance.closed) return;
-          instance.close();
-        }, duration);
+          instance.remove();
+          options.callback && options.callback();
+        }, instance.duration);
       });
+
       return instance;
     }
 
-    vue.toast = vue.prototype.$toast = toast;
+    const info = function(options) {
+      options = setOptions(options);
+      options = Object.assign({ type: 'info' }, options);
+      return show(options);
+    }
+
+    const error = function(options) {
+      options = setOptions(options);
+      options = Object.assign({ type: 'error' }, options);
+      return show(options);
+    }
+
+    const success = function(options) {
+      options = setOptions(options);
+      options = Object.assign({ type: 'success' }, options);
+      return show(options);
+    }
+    const Toast = {
+      info: info,
+      error: error,
+      success: success
+    };
+
+    Vue.toastr = Vue.prototype.$toastr = Toast;
+
+
   }
-};
+}
 export default plugin;
+

@@ -11,27 +11,30 @@ $ npm install mz-vue-toast
 ```Javascript
 // before start
 import Toast from 'mz-vue-toast';
-Vue.use(Toast);
 
 ```
 Basically you can pass a string to `Toast`:
 ```Javascript
-Vue.toast('test');
+Toast.info('test');
+Toast.success('success');
+Toast.error('error');
 ```
 Or invoke `Toast` with an object as its configuration:
 ```Javascript
-Vue.toast({
+Toast.info({
   message: 'test',
-  position: 'bottom',
-  duration: 5000
+  type: 'info',
+  duration: 3000,
+  className: 'my-class'
 });
+
 ```
 
 # API
 | Option    | Description                                    | Value                   | Default  |
 |-----------|------------------------------------------------|-------------------------|----------|
 | message   | content of the toast                           |                         |          |
-| position  | location of the toast relative to viewport     | 'top' 'bottom' 'middle' | 'middle' | 
+| type      | type of the toast                              | 'info' 'success' 'error'| 'info'   | 
 | duration  | time before the toast vanishes, in millisecond |                         | 3000     |
 | className | custom class name of the toast                 |                         |          |
 
