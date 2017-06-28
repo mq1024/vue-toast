@@ -10,18 +10,20 @@ $ npm install mz-vue-toast
 # Usage
 ```Javascript
 // before start
+import Vue from 'vue';
 import Toast from 'mz-vue-toast';
+Vue.use(Toast);
 
 ```
 Basically you can pass a string to `Toast`:
 ```Javascript
-Toast.info('test');
-Toast.success('success');
-Toast.error('error');
+Vue.toast.info('test');
+Vue.toast.success('success');
+Vue.toast.error('error');
 ```
 Or invoke `Toast` with an object as its configuration:
 ```Javascript
-Toast.info({
+Vue.toast.info({
   message: 'test',
   type: 'info',
   duration: 3000,
