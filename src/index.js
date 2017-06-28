@@ -6,10 +6,12 @@ const plugin = {
   install(Vue) {
     const ToastConstructor = Vue.extend(ToastComponent);
 
-    let instance = null;
+    let toastArr = [];
 
     let getInstance = () => {
-      if (instance) {
+      if (toastArr.length) {
+        let instance = toastArr[0];
+        toastArr.splice(0, 1);
         return instance;
       }
       return new ToastConstructor({
@@ -17,16 +19,24 @@ const plugin = {
       });
     };
 
-    let removeDom = el => {
-      if (el.parentNode) {
-        el.parentNode.removeChild(el);
+    let addInstance = instance => {
+      if(instance) {
+        toastArr.push(instance);
+      }
+    }
+
+    let removeDom = event => {
+      if (event.target.parentNode) {
+        event.target.parentNode.removeChild(el);
       }
     }
 
     ToastConstructor.prototype.remove = function() {
       this.shown = false;
-      instance = null;
-      removeDom(this.$el);
+      this.$el.addEventListener('transitionend', removeDom);
+      this.closed = true;
+      addInstance(this);
+
     }
 
     let setOptions = (options) => {
@@ -39,10 +49,12 @@ const plugin = {
     }
 
     const show = (options) => {
-      instance = getInstance();
-
-
+      let instance = getInstance();
+      instance.closed = false;
       clearTimeout(instance.timer);
+
+
+
       instance.message = options.message || '';
       instance.duration = (typeof options.duration === 'number' && options.duration > 0) ? options.duration : 3000;
       instance.type = options.type || 'info';
@@ -51,11 +63,13 @@ const plugin = {
 
       Vue.nextTick(function() {
         instance.shown = true;
+        instance.$el.removeEventListener('transitionend', removeDom);
+
         instance.timer = setTimeout(function() {
-          if(instance) {
-            instance.remove();
-            options.callback && options.callback();
+          if (instance.closed) {
+            return;
           }
+          instance.remove();
         }, instance.duration);
       });
 
@@ -91,4 +105,3 @@ const plugin = {
   }
 }
 export default plugin;
-

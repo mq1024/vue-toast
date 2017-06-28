@@ -1,21 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui, maximum-scale=1.0, minimum-scale=1.0">
   <style media="screen">
-    button {
-      padding: .5em 1em;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      background-color: #fff;
-    }
+  * {
+    margin: 0;
+    padding: 0;
+  }
+  header {
+    height: 44px;
+    line-height: 44px;
+    width: 100%;
+    background: #fff;
+    text-align: center;
+    font-size: 18px;
+    border-bottom: 1px solid ;
+  }
+  
+  button {
+    display: block;
+    margin-top: 20px;
+    padding: .5em 1em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+  }
   </style>
   <title>vue-toast-mobile examples</title>
 </head>
+
 <body>
-<button id="button">open a toast</button>
-<script src="bundle.js"></script>
+  <header>header</header>
+  <button id="toast_info">toast info</button>
+  <button id="toast_success">toast success</button>
+  <script src="bundle.js"></script>
 </body>
+
 </html>
