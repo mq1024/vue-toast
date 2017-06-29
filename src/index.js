@@ -30,7 +30,7 @@ const plugin = {
       }
     }
 
-    ToastConstructor.prototype.remove = function(callback) {
+    ToastConstructor.prototype.hide = function(callback) {
       this.shown = false;
       removeDom(this.$el)
         // this.$el.addEventListener('transitionend', removeDom);
@@ -72,7 +72,7 @@ const plugin = {
           if (instance.closed) {
             return;
           }
-          instance.remove(options.callback);
+          instance.hide(options.callback);
         }, instance.duration);
       });
 
