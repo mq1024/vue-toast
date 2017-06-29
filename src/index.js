@@ -5,7 +5,6 @@ import ToastComponent from './toast.vue';
 const plugin = {
   install(Vue) {
     const ToastConstructor = Vue.extend(ToastComponent);
-
     let toastArr = [];
 
     let getInstance = () => {
@@ -20,22 +19,26 @@ const plugin = {
     };
 
     let addInstance = instance => {
-      if(instance) {
+      if (instance) {
         toastArr.push(instance);
       }
     }
 
-    let removeDom = event => {
-      if (event.target.parentNode) {
-        event.target.parentNode.removeChild(el);
+    let removeDom = el => {
+      if (el.parentNode) {
+        el.parentNode.removeChild(el);
       }
     }
 
-    ToastConstructor.prototype.remove = function() {
+    ToastConstructor.prototype.remove = function(callback) {
       this.shown = false;
-      this.$el.addEventListener('transitionend', removeDom);
+      removeDom(this.$el)
+        // this.$el.addEventListener('transitionend', removeDom);
       this.closed = true;
       addInstance(this);
+      callback && callback();
+
+
 
     }
 
@@ -52,24 +55,24 @@ const plugin = {
       let instance = getInstance();
       instance.closed = false;
       clearTimeout(instance.timer);
-
-
+      instance.timer = null;
 
       instance.message = options.message || '';
       instance.duration = (typeof options.duration === 'number' && options.duration > 0) ? options.duration : 3000;
       instance.type = options.type || 'info';
+      instance.position = options.position || 'middle';
+      instance.callback = options.callback || null;
 
       document.body.appendChild(instance.$el);
 
       Vue.nextTick(function() {
         instance.shown = true;
-        instance.$el.removeEventListener('transitionend', removeDom);
 
         instance.timer = setTimeout(function() {
           if (instance.closed) {
             return;
           }
-          instance.remove();
+          instance.remove(options.callback);
         }, instance.duration);
       });
 
@@ -81,25 +84,24 @@ const plugin = {
       options = Object.assign({ type: 'info' }, options);
       return show(options);
     }
-
+    const success = function(options) {
+      options = setOptions(options);
+      options = Object.assign({ type: 'success', position: 'top' }, options);
+      return show(options);
+    }
     const error = function(options) {
       options = setOptions(options);
       options = Object.assign({ type: 'error' }, options);
       return show(options);
     }
 
-    const success = function(options) {
-      options = setOptions(options);
-      options = Object.assign({ type: 'success' }, options);
-      return show(options);
-    }
     const Toast = {
       info: info,
-      error: error,
-      success: success
+      success: success,
+      error: error
     };
 
-    Vue.toastr = Vue.prototype.$toastr = Toast;
+    Vue.toast = Vue.prototype.$toast = Toast;
 
 
   }
