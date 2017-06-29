@@ -1,17 +1,14 @@
 {
   "name": "mz-vue-toast",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "author": "maqian",
   "license": "MIT",
   "description": "A toast plugin for vue/vue2",
-  
-   "scripts": {
-     "dev": "webpack-dev-server --config ./webpack.example.config.js --content-base example/ --inline --hot",
+  "scripts": {
+    "dev": "webpack-dev-server --config ./webpack.example.config.js --content-base example/ --inline --hot",
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
-
   "main": "src/index.js",
-  
   "devDependencies": {
     "babel-core": "^6.0.0",
     "babel-loader": "^6.0.0",
